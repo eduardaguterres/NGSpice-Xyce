@@ -6,9 +6,9 @@
 .param supply = 0.7
 vdd vdd 0 dc 0.7
 * Variando Inv1
-vin1 in1 0 PULSE (0.7 0.7 300p 10p 10p 300p 600p)
-vin2 in2 0 PULSE (0.7 0.7 0p 10p 10p 1200p 1200p)
-vin3 in3 0 PULSE (0.7 0.7 0p 10p 10p 1200p 2400p)
+vin1 in1 0 PULSE (0. 0. 0p 10p 10p 1200p 1200p)
+vin2 in2 0 PULSE (0. 0. 0p 10p 10p 1200p 1200p)
+vin3 in3 0 PULSE (0. 0. 0p 10p 10p 1200p 2400p)
 
 .tran 0.001p 1000p
 
@@ -30,5 +30,6 @@ iexp 0 aux exp(0 51u 50p 2p 65p 4p)
 
 .OPTION OUTPUT INITIAL_INTERVAL=.1ps 350ps
 .PRINT TRAN FORMAT=CSV v(out) v(in1) v(in2) v(in3)
-
+.measure tran valor_maximo MAX v(out) from=50p to=65p
+.measure tran valor_minimo MIN v(out) from=50p to=65p
 .end
