@@ -4,36 +4,51 @@
 
 * Declaração das fontes
 .param supply = 0.7
+.param fin_nmos = 2
+.param fin_pmos = 2
 
 vdd vdd 0 dc 0.7
-vin1 in1 0 PULSE (0 0.7 50p 10p 10p 300p 500p)
-vin2 in2 0 PULSE (0 0. 50p 10p 10p 1000p 1000p)
-vin3 in3 0 PULSE (0 0. 50p 10p 10p 1000p 1000p)
-vin4 in4 0 PULSE (0 0. 50p 10p 10p 1000p 1000p)
+vin1 in1 0 DC 0.7 
+vin2 in2 0 DC 0.7
+vin3 in3 0 DC 0.7
+vin4 in4 0 DC 0.
 
-.tran 0.001p 1000p
+Vagingp1 in1 inp1 dc -0.0445
+Vagingp2 in2 inp2 dc -0.0445
+Vagingp3 in3 inp3 dc -0.0445
+Vagingp4 in4 inp4 dc -0.0445
 
+Vagingn1 in1 inn1 dc 0.0445
+Vagingn2 in2 inn2 dc 0.0397
+Vagingn3 in3 inn3 dc 0.0354
+Vagingn4 in4 inn4 dc 0.0315
 
-MP1 out     in1     vdd     vdd pmos_lvt L=20n NFIN=2 
-MP2 out     in2     vdd     vdd pmos_lvt L=20n NFIN=2
-MP3 out     in3     vdd     vdd pmos_lvt L=20n NFIN=2
-MP4 out     in4     vdd     vdd pmos_lvt L=20n NFIN=2
+.tran 0.001p 100p
 
-MN1 out     in1     n1      n1 nmos_lvt L=20n NFIN=2
-MN2 n1      in2     n2      n2 nmos_lvt L=20n NFIN=2  
-MN3 n2      in3     n3      n3  nmos_lvt L=20n NFIN=2 
-MN4 n3      in4     0       0  nmos_lvt L=20n NFIN=2 
+MP1 out     inp1     vdd     vdd pmos_lvt L=20n NFIN=fin_pmos 
+MP2 out     inp2     vdd     vdd pmos_lvt L=20n NFIN=fin_pmos
+MP3 out     inp3     vdd     vdd pmos_lvt L=20n NFIN=fin_pmos
+MP4 out     inp4     vdd     vdd pmos_lvt L=20n NFIN=fin_pmos
 
-vaux aux n1 0
+MN1 out     inn1     n1      0  nmos_lvt L=20n NFIN=fin_nmos 
+MN2 n1      inn2     n2      0  nmos_lvt L=20n NFIN=fin_nmos 
+MN3 n2      inn3     n3      0  nmos_lvt L=20n NFIN=fin_nmos 
+MN4 n3      inn4     0       0  nmos_lvt L=20n NFIN=fin_nmos 
+
+vaux n3 aux 0
 * Positivo
 *iexp 0 aux exp(0 28u 150p 2p 165p 4p)
 * Negativo
-iexp2 aux 0 exp(0 250u 70p 2p 85p 4p)
-
+iexp2 aux 0 exp(0 26u 5p 2p 20p 4p)
 
 .OPTION OUTPUT INITIAL_INTERVAL=.1ps 350ps
-.PRINT TRAN FORMAT=CSV v(out) v(in1) v(in2) v(in3) v(in4)
-.measure tran valor_maximo MAX v(out) from=0n to=100p
-.measure tran valor_minimo MIN v(out) from=0n to=100p
+.PRINT TRAN FORMAT=CSV v(out) v(in1) v(in2) v(in3) v(in4) v(n1) v(n2)
+.measure tran valor_maximo MAX v(out) from=0 to=100p
+.measure tran valor_minimo MIN v(out) from=0p to=100p
+*.measure tran valor_min_vn1 MIN v(n1) from=0p to=100p
+*.measure tran valor_min_vn2 MIN v(n2) from=0p to=100p
+*.measure tran valor_max_vn2 MAX v(n2) from=0p to=100p
+.measure tran valor_min_vn3 MIN v(n3) from=0p to=100p
+.measure tran valor_max_vn3 MAX v(n3) from=0p to=100p
 
 .end
